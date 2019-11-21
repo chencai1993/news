@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <link rel="stylesheet"  href="/static/css/bootstrap.min.css"/>
+
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+    <script>
+
+
+
+    function showdetail(id)
+    {
+        window.location.href="/trend/showdetail?id="+id
+    }
+
+    </script>
+    <style>
+     .center{
+         width:100%;
+         margin: 0 auto;
+         text-align:center;
+    }
+    form td{
+        margin:5px;
+        padding:5px;
+    }
+    .chart{
+           width:50%;
+           height:500px;
+           float:left;
+        }
+
+    </style>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+</head>
+<body>
+
+<div class="center" style="">
+
+<form action="/source/index/" method="POST" >
+{% csrf_token %}
+
+    <div style="margin:20px">
+    <table >
+    <tr>
+        <td>
+            开始日期：
+        </td>
+        <td>
+
+    <input name="start_date" type="date"   class="form-control" value="{{start_date}}"/>
+        </td>
+        <td>
+                结束日期：
+        </td>
+        <td>
+
+
+    <input name="end_date" type="date"  class="form-control"  value="{{end_date}}" />
+        </td>
+
+
+
+
+
+
+
+
+
+
+        <td>
+                统计方式：
+           </td>
+            <td>
+                <select  class="form-control" name="countType" value="{{countType}}">
+                    <option value="day">天</option>
+                    <option value="month">月</option>
+                </select>
+            </td>
+
+
+                        <td>
+    <input type="submit" class="btn btn-default" />
+
+
+            </td>
+        </tr>
+
+        </table>
+
+    <input name='currentPage' type="hidden" value="{{currentPage}}"/>
+
+
+    </div>
+
+
+</form>
+
+<div class="chart" id="left" >
+
+
+</div>
+    <div class="chart" id="right" >
+</div>
+
+</div>
+
+
+   <script type="text/javascript">
+
+
+       var source = {{source|safe}};
+       piechartload('left','新闻数量占比',Object.keys(source),Object.values(source))
+
+       mutilinechartload('right','')
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+</html>

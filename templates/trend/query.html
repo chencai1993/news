@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <link rel="stylesheet"  href="/static/css/bootstrap.min.css"/>
+
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+    <script>
+
+
+
+    function showdetail(id)
+    {
+        window.location.href="/trend/showdetail?id="+id
+    }
+
+    </script>
+    <style>
+     .center{
+         width:100%;
+         margin: 0 auto;
+         text-align:center;
+    }
+    form td{
+        margin:5px;
+        padding:5px;
+        font-size:20px;
+    }
+    </style>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+</head>
+<body>
+
+<div class="center" style="">
+
+<form action="/trend/index/" method="POST" >
+{% csrf_token %}
+
+    <div style="margin:20px">
+    <table width="100%">
+    <tr>
+        <td>
+            开始日期：
+        </td>
+        <td>
+
+    <input name="start_date" type="date"   class="form-control" value="{{start_date}}"/>
+        </td>
+        <td>
+                结束日期：
+        </td>
+        <td>
+
+
+    <input name="end_date" type="date"  class="form-control"  value="{{end_date}}" />
+        </td>
+
+
+
+          <td>
+               行业：
+           </td>
+            <td>
+                <select  class="form-control" name="industry" value="{{industry}}">
+                    <option value="">全部</option>
+                    <option value="农副产品">农副产品</option>
+                    <option value="蔬菜">蔬菜</option>
+                    <option value="水果">水果</option>
+                    <option value="畜牧水产">畜牧水产</option>
+                    <option value="粮油米面">粮油米面</option>
+                </select>
+            </td>
+
+
+          <td>
+                关键词：
+        </td>
+        <td>
+            <input name="keyword" type="input"  class="form-control"  value="{{keyword}}" />
+        </td>
+
+
+
+
+
+
+
+        </tr>
+
+        <tr>
+
+
+             <td>
+                是否负面新闻：
+           </td>
+            <td>
+                <select  class="form-control" name="emotion" value="{{emotion}}">
+                    <option value="">全部</option>
+                    <option value="1">负面</option>
+                    <option value="0">其他</option>
+                </select>
+            </td>
+
+              <td>
+                新闻类型：
+           </td>
+            <td>
+                <select  class="form-control" name="type" value="{{emotion}}">
+                    <option value="">全部</option>
+                    <option value="1">农业新闻</option>
+                    <option value="0">农产品新闻</option>
+                </select>
+            </td>
+
+        <td>
+                统计方式：
+           </td>
+            <td>
+                <select  class="form-control" name="countType" value="{{countType}}">
+                    <option value="day">天</option>
+                    <option value="month">月</option>
+                </select>
+            </td>
+
+
+                        <td>
+    <input type="submit" class="btn btn-default" />
+
+
+            </td>
+        </tr>
+
+        </table>
+
+    <input name='currentPage' type="hidden" value="{{currentPage}}"/>
+
+
+    </div>
+
+
+</form>
+
+<div id="chart" style="height:500px;width:1000px;margin:0 auto">
+
+
+</div>
+
+</div>
+
+
+   <script type="text/javascript">
+
+
+       var line = {{line|safe}};
+
+
+
+
+
+
+       linechartload('chart','数量变化',Object.keys(line),Object.values(line))
+
+            //mutilinechartload1('chart','正负新闻变化趋势')
+
+
+
+    </script>
+
+
+</body>
+</html>

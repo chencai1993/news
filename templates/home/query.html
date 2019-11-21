@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <link rel="stylesheet"  href="/static/css/bootstrap.min.css"/>
+
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+
+    <script src="/static/js/jqPaginator.js"></script>
+
+
+    <script src="/static/js/pager.js"></script>
+
+    <script>
+
+    $(function(){
+        load_pager({{totalPages}},{{totalCounts}},{{currentPage}})
+    })
+
+    function showdetail(id)
+    {
+        window.location.href="/home/showdetail?id="+id
+    }
+
+    </script>
+    <style>
+     .center{
+         width:100%;
+         margin: 0 auto;
+         text-align:center;
+    }
+    form td{
+        margin:5px;
+        padding:5px;
+    }
+    td{
+        font-size:25px;
+    }
+    </style>
+</head>
+<body>
+
+<div class="center" style="height:300px">
+
+<form action="/home/index/" method="POST">
+{% csrf_token %}
+
+    <div style="margin:20px">
+    <table width="100%">
+    <tr>
+        <td>
+            开始日期：
+        </td>
+        <td>
+
+    <input name="start_date" type="date"   class="form-control" value="{{start_date}}"/>
+        </td>
+        <td>
+                结束日期：
+        </td>
+        <td>    <input name="end_date" type="date"  class="form-control"  value="{{end_date}}" />
+        </td>
+
+             <td>
+                省：
+           </td>
+            <td>
+                <select  class="form-control" name="" value="{{emotion}}">
+                    <option value="">全部</option>
+                    <option value="1">负面</option>
+                    <option value="0">其他</option>
+                </select>
+            </td>
+
+         <td>
+                市：
+           </td>
+            <td>
+                <select  class="form-control" name="" value="{{emotion}}">
+                    <option value="">全部</option>
+                    <option value="1">负面</option>
+                    <option value="0">其他</option>
+                </select>
+            </td>
+
+         <td>
+                县：
+           </td>
+            <td>
+                <select  class="form-control" name="" value="{{emotion}}">
+                    <option value="">全部</option>
+                    <option value="1">负面</option>
+                    <option value="0">其他</option>
+                </select>
+            </td>
+
+     </tr>
+
+        <tr>
+
+
+
+         <td>
+                关键词：
+        </td>
+        <td>
+            <input name="keyword" type="input"  class="form-control"  value="{{keyword}}" />
+        </td>
+
+        <td>
+                标题：
+        </td>
+        <td>
+            <input name="title" type="input"  class="form-control"  value="{{title}}" />
+        </td>
+
+
+
+
+
+
+
+
+
+
+
+         <td>
+                新闻类型：
+           </td>
+            <td>
+                <select  class="form-control" name="emotion" value="{{emotion}}">
+                    <option value="">全部</option>
+                    <option value="1">负面</option>
+                    <option value="0">其他</option>
+                </select>
+            </td>
+
+
+
+    <td>
+                新闻来源：
+           </td>
+            <td>
+
+                <select  class="form-control" name="source" value="{{source}}">
+                    <option value="">全部</option>
+                    <option value="新浪">新浪</option>
+                    <option value="惠农网">惠农网</option>
+                    <option value="农村网">农村网</option>
+                    <option value="中国农业新闻网">中国农业新闻网</option>
+                    <option vlaue="中国农产品网">中国农产品网</option>
+                </select>
+            </td>
+
+
+
+
+                        <td>
+    <input type="submit" class="btn btn-default" />
+
+
+
+
+
+            </td>
+
+  </div>
+
+        </td>
+
+        </tr>
+
+        </table>
+
+    <input name='currentPage' type="hidden" value="{{currentPage}}"/>
+
+
+
+    </div>
+
+
+</form>
+
+
+
+<table  class="table"  align="center">
+<tr>
+<td>
+标题
+</td>
+
+    <td>
+关键词
+</td>
+<td>
+发布时间
+</td>
+    <td>
+新闻来源
+</td>
+
+
+    <td>
+新闻详情
+</td>
+
+        <td>
+<input type="button" class="btn" value="批量删除"/>
+</td>
+
+
+
+</tr>
+{% for c in datas %}
+<tr>
+<td>
+{{c.title|slice:"0:20"}} ....
+</td>
+
+
+<td>
+{{c.keywords}}
+</td>
+<td>
+{{c.publish_time|slice:"0:10"}}
+</td>
+<td>
+
+{{c.source}}
+</td>
+
+
+    <td>
+        <input value="查看详情" type="button" class="btn" onclick="showdetail({{c.id}})"/>
+
+    </td>
+
+     <td>
+         <input type='checkbox' value="{{c.id}}" />
+    </td>
+
+
+</tr>
+{% endfor %}
+
+
+</table>
+
+  <ul class="pagination" id="pagination"></ul>
+
+
+</div>
+<script>
+           $('[name="source"]').val('{{source}}')
+</script>
+
+</body>
+</html>

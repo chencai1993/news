@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .chart{
+            width:500px;
+            height:500px;
+            float:left;
+            }
+     div{
+        font-size:25px;
+    }
+    </style>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+
+</head>
+<body>
+
+<div style="width:100%;height:700px;overflow:auto;">
+<div class="media" style="margin:10px 0px 50px 0px">
+
+  <div class="media-body">
+    <h4 class="media-heading">标题：{{data.title}} <a href="{{data.url}}" target="_blank">   阅读原文</a></h4>
+
+
+
+      <h5 class="media-heading">关键词：{{data.keywords}}</h5>
+      <h5 class="media-heading">发布时间：{{data.publish_time|slice:"0:16"}}</h5>
+
+      <h5 class="media-heading">是否负面新闻：
+          <select value="{{data.emotion}}" class="form-control">
+              <option value="">否</option>
+              <option value="1">是</option>
+          </select>
+
+      </h5>
+      <h5 class="media-heading">新闻来源：{{data.source}}</h5>
+        <div style="height:500px;width:1000px;margin:0 auto">
+        <div class="chart" id="left">
+
+        </div>
+        <div  class="chart" id="right">
+
+        </div>
+        </div>
+
+    <h5 class="media-heading">摘要：</h5>
+    {{data.summary}}
+      <h5 class="media-heading">正文：</h5>
+     {{data.content}}
+  </div>
+</div>
+</div>
+
+   <script type="text/javascript">
+
+
+       var names = {{names|safe}};
+       var industry = {{industry|safe}};
+
+
+       piechartload('left','农产品占比',Object.keys(names),Object.values(names))
+       piechartload('right','行业占比',Object.keys(industry),Object.values(industry))
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <link rel="stylesheet"  href="/static/css/bootstrap.min.css"/>
+
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+
+
+
+
+
+
+
+
+    <script>
+
+
+
+    function showdetail(id)
+    {
+        window.location.href="/trend/showdetail?id="+id
+    }
+
+    </script>
+    <style>
+     .center{
+         width:100%;
+         margin: 0 auto;
+         text-align:center;
+    }
+    form td{
+        margin:5px;
+        padding:5px;
+    }
+    .chart{
+           width:33%;
+           height:500px;
+           float:left;
+        }
+
+    </style>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="/static/js/charts.js"></script>
+
+</head>
+<body>
+
+<div class="center" style="">
+
+<form action="/emotion/index/" method="POST" >
+{% csrf_token %}
+
+    <div style="margin:20px">
+    <table >
+    <tr>
+        <td>
+            开始日期：
+        </td>
+        <td>
+
+    <input name="start_date" type="date"   class="form-control" value="{{start_date}}"/>
+        </td>
+        <td>
+                结束日期：
+        </td>
+        <td>
+         <input name="end_date" type="date"  class="form-control"  value="{{end_date}}" />
+        </td>
+
+         <td>
+                关键词：
+        </td>
+        <td>
+            <input name="keyword" type="input"  class="form-control"  value="{{keyword}}" />
+        </td>
+
+
+        <td>
+                区域级别：
+           </td>
+            <td>
+
+                <select  class="form-control" name="area" value="{{area}}">
+                    <option value="province">省</option>
+                    <option value="county">市</option>
+                    <option value="city">县</option>
+                </select>
+            </td>
+
+        <td>
+
+
+
+
+
+
+
+        </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <td>
+    <input type="submit" class="btn btn-default" />
+
+
+            </td>
+        </tr>
+
+        </table>
+
+    <input name='currentPage' type="hidden" value="{{currentPage}}"/>
+
+
+    </div>
+
+
+</form>
+
+<div  id="left" style="float:left;width:50%;height:500px" ></div>
+    <div  id="mid" style="float:left;width:50%;height:250px" ></div>
+    <div id="right" style="float:left;width:50%;height:250px"  ></div>
+
+</div>
+
+
+   <script type="text/javascript">
+
+
+       var names = {{names|safe}};
+       piechartload('mid','农产品占比',Object.keys(names),Object.values(names))
+
+       var industrys = {{industrys|safe}};
+       piechartload('right','农产品种类占比',Object.keys(industrys),Object.values(industrys))
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=TDPdC52gGcOF6OeggKo2Tl2Y"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+
+
+
+ <script type="text/javascript">
+var dom = document.getElementById("left");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var data = {{area_data|safe}};
+
+maxx = 0
+for(var i=0;i<data.length;i++){
+     if(data[i].value>maxx)
+         maxx=data[i].value
+}
+
+var geoCoordMap = {{geo_data|safe}};
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+function renderItem(params, api) {
+    var coords = [
+        [116.7,39.53],
+        [103.73,36.03],
+        [112.91,27.87],
+        [120.65,28.01],
+        [119.57,39.95]
+    ];
+    var points = [];
+    for (var i = 0; i < coords.length; i++) {
+        points.push(api.coord(coords[i]));
+    }
+    var color = api.visual('color');
+
+    return {
+        type: 'polygon',
+        shape: {
+            points: echarts.graphic.clipPointsByRect(points, {
+                x: params.coordSys.x,
+                y: params.coordSys.y,
+                width: params.coordSys.width,
+                height: params.coordSys.height
+            })
+        },
+        style: api.style({
+            fill: color,
+            stroke: echarts.color.lift(color)
+        })
+    };
+}
+
+option = {
+    // backgroundColor: '#404a59',
+    title: {
+        text: '负面舆情事件分布',
+
+        left: 'center',
+        textStyle: {
+            color: '#fff'
+        }
+    },
+    visualMap: {
+        min: 0,
+        max: maxx,
+        calculable: true,
+        inRange: {
+            color: ['#50a3ba', '#eac736', '#d94e5d']
+        },
+        textStyle: {
+            color: '#fff'
+        }
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: function (params) {
+            return params.name + ' : ' + params.value[2]+'件';
+        }
+    },
+    bmap: {
+        center: [104.114129, 37.550339],
+        zoom: 4,
+        roam: true,
+        mapStyle: {
+            styleJson: [
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#044161"
+                        }
+                    },
+                    {
+                        "featureType": "land",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#004981"
+                        }
+                    },
+                    {
+                        "featureType": "boundary",
+                        "elementType": "geometry",
+                        "stylers": {
+                            "color": "#064f85"
+                        }
+                    },
+                    {
+                        "featureType": "railway",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "highway",
+                        "elementType": "geometry",
+                        "stylers": {
+                            "color": "#004981"
+                        }
+                    },
+                    {
+                        "featureType": "highway",
+                        "elementType": "geometry.fill",
+                        "stylers": {
+                            "color": "#005b96",
+                            "lightness": 1
+                        }
+                    },
+                    {
+                        "featureType": "highway",
+                        "elementType": "labels",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "arterial",
+                        "elementType": "geometry",
+                        "stylers": {
+                            "color": "#004981"
+                        }
+                    },
+                    {
+                        "featureType": "arterial",
+                        "elementType": "geometry.fill",
+                        "stylers": {
+                            "color": "#00508b"
+                        }
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "green",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#056197",
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "subway",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "manmade",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "local",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "arterial",
+                        "elementType": "labels",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    },
+                    {
+                        "featureType": "boundary",
+                        "elementType": "geometry.fill",
+                        "stylers": {
+                            "color": "#029fd4"
+                        }
+                    },
+                    {
+                        "featureType": "building",
+                        "elementType": "all",
+                        "stylers": {
+                            "color": "#1a5787"
+                        }
+                    },
+                    {
+                        "featureType": "label",
+                        "elementType": "all",
+                        "stylers": {
+                            "visibility": "off"
+                        }
+                    }
+            ]
+        }
+    },
+    series : [
+        {
+            name: '数量',
+            type: 'scatter',
+            coordinateSystem: 'bmap',
+            data: convertData(data),
+            symbolSize: function (val) {
+                return val[2];
+            },
+            label: {
+                normal: {
+                    formatter: '{b}',
+                    position: 'right',
+                    show: false
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#ddb926'
+                }
+            }
+        },
+        {
+            name: 'Top 10',
+            type: 'effectScatter',
+            coordinateSystem: 'bmap',
+            data: convertData(data.sort(function (a, b) {
+                return b.value - a.value;
+            }).slice(0, 6)),
+            symbolSize: function (val) {
+                return val[2] ;
+            },
+            showEffectOn: 'emphasis',
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+                normal: {
+                    formatter: '{b}',
+                    position: 'right',
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#f4e925',
+                    shadowBlur: 10,
+                    shadowColor: '#333'
+                }
+            },
+            zlevel: 1
+        },
+
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+
+
+</body>
+</html>
