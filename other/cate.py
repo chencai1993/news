@@ -1,8 +1,9 @@
 
 from other.home_crawldata import HomeCrawldata
 import pandas as pd
+import  os
 def load():
-    df = pd.read_csv('cate_name.csv',sep=',',encoding='gbk')
+    df = pd.read_csv(os.path.join(os.path.abspath('.'),'cate_name.csv'),sep=',',encoding='gbk')
     s = set()
     for i in range(df.shape[0]):
         t = df.name.iloc[i].split(';')
