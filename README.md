@@ -7,8 +7,8 @@
 7. 删除项目中的home/migrations文件夹，  再使用cmd切换到项目根目录，执行 python manage.py makegrations home , 命令成功后执行 python manage.py migrate 命令执行完后数据库就创建成功了，
 项目应该就能运行了，但是爬虫相关的数据库配置还需要修改一下
 8. 替换pyspider 的数据库文件， 在爬虫里面引用了项目中的 other/home_crawldata.py 文件连接数据库，由于路径是写死的，会导致数据库无法访问，
-因此需要把other/home_crawldata.py 的路径加入到python 的系统路径中。 具体方法是：先使用conda info -e 找到py36环境的安装路径，例如
-(py36) ➜  site-packages conda info -e
+因此需要把other/home_crawldata.py 的路径加入到python 的系统路径中。 具体方法是：先使用conda info -e 找到py36环境的安装路径，例如：
+conda info -e
 base                     /home/chencai/anaconda3
 py36                  *  /home/chencai/anaconda3/envs/py36
 这里的py36环境的路径就是/home/chencai/anaconda3/envs/py36  ，
