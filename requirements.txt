@@ -30,6 +30,6 @@ sqlparse==0.3.0
 tblib==1.5.0
 tornado==4.5.3
 u-msgpack-python==2.5.2
-urllib3==1.25.7
+urllib3==1.26.5
 Werkzeug==0.16.0
 WsgiDAV==2.4.1
